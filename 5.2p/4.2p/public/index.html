@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIT725 - Task 4.2P</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper blue darken-3">
+            <a href="#" class="brand-logo center">MongoDB Connector</a>
+        </div>
+    </nav>
+
+    <div class="container" style="margin-top: 50px;">
+        <div class="row">
+            <form class="col s12" id="userForm">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="first_name" type="text" class="validate">
+                        <label for="first_name">First Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="last_name" type="text" class="validate">
+                        <label for="last_name">Last Name</label>
+                    </div>
+                </div>
+                <button class="btn waves-effect waves-light blue" type="submit">Submit to DB</button>
+            </form>
+        </div>
+
+        <div class="row">
+            <h5>Data from MongoDB:</h5>
+            <ul id="userList" class="collection"></ul>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

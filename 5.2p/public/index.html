@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head><title>Books Catalog</title></head>
+<body>
+    <h1>Book List</h1>
+    <ul id="book-list"></ul>
+
+    <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const res = await fetch("/api/books");
+            const result = await res.json();
+            const list = document.getElementById('book-list');
+            
+            // Clear the "Loading..." text
+            list.innerHTML = ''; 
+
+            result.data.forEach(book => {
+                // Create a container for each book to force a new line
+                const bookItem = document.createElement('div');
+                
+                // Add some padding/styling for clarity
+                bookItem.style.padding = "10px 0";
+                bookItem.style.borderBottom = "1px solid #ddd";
+                
+                // Insert the text
+                bookItem.innerHTML = `<strong>${book.title}</strong> by ${book.author}`;
+                
+                list.appendChild(bookItem);
+            });
+        } catch (err) {
+            console.error("Error fetching books:", err);
+        }
+    });
+</script>
+</body>
+</html>
