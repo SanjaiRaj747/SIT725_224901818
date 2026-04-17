@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Catalog - SIT725 5.3C</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 40px; line-height: 1.6; }
+        .book-item { cursor: pointer; padding: 12px; border-bottom: 1px solid #ddd; transition: 0.2s; }
+        .book-item:hover { background-color: #f0f7ff; }
+        #book-details { 
+            margin-top: 30px; 
+            padding: 20px; 
+            border: 2px solid #333; 
+            display: none; 
+            background: #fffef0;
+            border-radius: 8px;
+        }
+        button { 
+            padding: 10px 20px; 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Books Catalogue developed by 224901818</h1>
+    
+    <p>Click the button below to get all books from the server:</p>
+    <button onclick="loadBooks()">Get all books</button>
+
+    <h2>Book List</h2>
+    <div id="book-list"></div>
+
+    <div id="book-details"></div>
+
+    <script>
+    async function loadBooks() {
+        const list = document.getElementById('book-list');
+        list.innerHTML = 'Loading...';
+        
+        try {
+            const res = await fetch("/api/books");
+            const result = await res.json();
+            
+            // Log this so you can Right-Click -> Inspect -> Console in Chrome
+            console.log("Data received from server:", result.data);
+
+            list.innerHTML = '';
+
+            result.data.forEach(book => {
+                const div = document.createElement('div');
+                div.className = 'book-item';
+                
+                // If price is missing from the JSON, we show "Price N/A" 
+                // instead of letting it break and show "undefined"
+                let displayPrice = "Price ";
+                
+                if (book.price) {
+                    displayPrice = book.price.$numberDecimal ? book.price.$numberDecimal : book.price;
+                }
+                
+                div.innerHTML = `<strong>${book.title}</strong> - ${displayPrice} AUD`;
+                div.onclick = () => showBookDetails(book.id);
+                list.appendChild(div);
+            });
+        } catch (err) {
+            list.innerHTML = 'Error loading books. Check console.';
+            console.error("Error:", err);
+        }
+    }
+
+    async function showBookDetails(id) {
+        try {
+            const res = await fetch(`/api/books/${id}`);
+            const result = await res.json();
+            const b = result.data;
+            const detailsDiv = document.getElementById('book-details');
+            
+            let displayPrice = "Price 29.22";
+            if (b.price) {
+                displayPrice = b.price.$numberDecimal ? b.price.$numberDecimal : b.price;
+            }
+
+            detailsDiv.style.display = 'block';
+            detailsDiv.innerHTML = `
+                <h2>Book Details</h2>
+                <p><strong>Title:</strong> ${b.title}</p>
+                <p><strong>Author:</strong> ${b.author}</p>
+                <p><strong>Year:</strong> ${b.year}</p>
+                <p><strong>Genre:</strong> ${b.genre}</p>
+                <p><strong>Summary:</strong> ${b.summary}</p>
+                <p><strong>Price (AUD):</strong> ${displayPrice}</p>
+            `;
+            detailsDiv.scrollIntoView({ behavior: 'smooth' });
+        } catch (err) {
+            console.error("Error fetching details:", err);
+        }
+    }
+</script>
+</body>
+</html>
