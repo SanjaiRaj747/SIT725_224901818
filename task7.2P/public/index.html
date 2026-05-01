@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-Time User Tracker</title>
+</head>
+<body>
+    <h1>Welcome to the Real-Time App</h1>
+    <div id="counter-box" style="padding: 20px; border: 2px solid #000; display: inline-block;">
+        <h2>Current Online Users: <span id="count">0</span></h2>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const countDisplay = document.getElementById('count');
+
+        socket.on('user-update', (count) => {
+            countDisplay.innerText = count;
+        });
+    </script>
+</body>
+</html>
